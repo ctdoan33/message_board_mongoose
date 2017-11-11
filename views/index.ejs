@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Message Board</title>
+</head>
+<body>
+	<h1>The Dojo Message Board</h1>
+	<hr>
+	<% for(var error in messages){ %>
+		<% if(error=="message_error"){ %>
+			<% for(var i=0; i<messages[error].length; i++){ %>
+				<% for(field_error in messages[error][i]){ %>
+					<p><%= messages[error][i][field_error].message %></p>
+				<% } %>
+			<% } %>
+		<% } %>
+	<% } %>
+	<form action="/messages" method="post">
+		<p>
+			<label for="name">Name:</label>
+			<br>
+			<input type="text" name="name">
+		</p>
+		<p>
+			<label for="message">Message:</label>
+			<br>
+			<textarea name="message" id="message" cols="30" rows="10"></textarea>
+		</p>
+		<input type="submit" value="Post message">
+	</form>
+	<% for(var i=message.length-1; i>=0; i--){ %>
+		<h3>Name: <%= message[i].name %><br>Message: <%= message[i].message %></h3>
+		<% for(var j=0; j<message[i].comments.length; j++){ %>
+			<p>Name: <%= message[i].comments[j].name %><br>Comment: <%= message[i].comments[j].comment %></p>
+		<% } %>
+		<% for(var error in messages){ %>
+			<% if(error==message[i]._id){ %>
+				<% for(var j=0; j<messages[error].length; j++){ %>
+					<% for(field_error in messages[error][j]){ %>
+						<p><%= messages[error][j][field_error].message %></p>
+					<% } %>
+				<% } %>
+			<% } %>
+		<% } %>
+		<form action="/messages/<%= message[i]._id %>" method="post">
+			<p>
+				<label for="name">Name:</label>
+				<br>
+				<input type="text" name="name">
+			</p>
+			<p>
+				<label for="comment"></label>
+				<br>
+				<textarea name="comment" id="comment" cols="30" rows="10"></textarea>
+			</p>
+			<input type="submit" value="Post Comment">
+		</form>
+	<% } %>
+</body>
+</html>
